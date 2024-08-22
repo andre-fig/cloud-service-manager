@@ -1,0 +1,49 @@
+name: "consignado"
+services:
+  pgdb:
+    image: bitnami/postgresql:latest
+    environment:
+      - POSTGRESQL_USERNAME=${DOCKER_DB_USERNAME}
+      - POSTGRESQL_PASSWORD=${DOCKER_DB_PASSWORD}
+      - POSTGRESQL_POSTGRES_PASSWORD=Password123
+      - POSTGRESQL_PORT_NUMBER=${DOCKER_DB_PORT}
+    expose:
+      - "${DOCKER_DB_PORT}"
+    ports:
+      - "${DOCKER_DB_PORT}:${DOCKER_DB_PORT}"
+    volumes:
+      - pgdb_data:/bitnami/postgresql
+
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+
+  rabbitmq:
+    image: rabbitmq:3.11.28-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST}
+
+    expose:
+      - "${RABBITMQ_PORT}"
+    ports:
+      - "${RABBITMQ_PORT}:${RABBITMQ_PORT}"
+      - 8080:15672
+
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"
+      - "4572:4572"
+    environment:
+      - SERVICES=s3
+
+volumes:
+  pgdb_data:
+    driver: local
+  redis_data:
+    driver: local

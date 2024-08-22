@@ -1,1 +1,1 @@
-# cloud-service-manager
+# Cloud Service Manager

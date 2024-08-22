@@ -1,0 +1,30 @@
+FROM node:20-alpine3.19
+WORKDIR /app
+COPY .profile ~/.profile
+RUN apt-get update
+
+RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.5/zsh-in-docker.sh)" -- \
+  -p git -p ssh-agent -p 'history-substring-search' \
+  -a 'bindkey "\$terminfo[kcuu1]" history-substring-search-up' \
+  -a 'bindkey "\$terminfo[kcud1]" history-substring-search-down' \
+  -t robbyrussell
+
+RUN apt-get install -y \
+  build-essential \
+  vim \
+  nano \
+  curl \
+  git \
+  gnupg \
+  jq \
+  libssl-dev \
+  make \
+  unzip \
+  wget \
+  zip \
+  postgresql-client \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN npm i -g @nestjs/cli
+
+CMD [ "tail", "-f", "/dev/null" ]
