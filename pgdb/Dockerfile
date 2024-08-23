@@ -1,0 +1,9 @@
+FROM bitnami/postgresql:latest
+
+# Set environment variables
+ENV POSTGRESQL_USERNAME=app \
+    POSTGRESQL_PASSWORD=Password123 \
+    POSTGRESQL_POSTGRES_PASSWORD=Password123 \
+    POSTGRESQL_PORT_NUMBER=5432
+
+EXPOSE 5432
