@@ -1,43 +1,36 @@
 services:
   pgdb:
-    image: bitnami/postgresql:latest
-    environment:
-      - POSTGRESQL_USERNAME=app
-      - POSTGRESQL_PASSWORD=Password123
-      - POSTGRESQL_POSTGRES_PASSWORD=Password123
-      - POSTGRESQL_PORT_NUMBER=5432
+    build: ./pgdb
     ports:
       - '5432:5432'
     volumes:
       - pgdb_data:/bitnami/postgresql
 
   redis:
-    image: redis:latest
+    build: ./redis
     ports:
       - '6379:6379'
     volumes:
       - redis_data:/data
 
   rabbitmq:
-    image: rabbitmq:3.11.28-management
-    environment:
-      - RABBITMQ_DEFAULT_USER=teddy
-      - RABBITMQ_DEFAULT_PASS=Password123
-      - RABBITMQ_DEFAULT_VHOST=local
+    build: ./rabbitmq
     ports:
       - '5672:5672'
       - '8080:15672'
 
   localstack:
-    image: localstack/localstack:latest
+    build: ./localstack
     ports:
       - '4566:4566'
       - '4572:4572'
-    environment:
-      - SERVICES=s3
+    volumes:
+      - localstack_data:/var/lib/localstack
 
 volumes:
   pgdb_data:
     driver: local
   redis_data:
+    driver: local
+  localstack_data:
     driver: local
